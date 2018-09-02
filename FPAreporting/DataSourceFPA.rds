@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RptDataSource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Name="DataSourceFPA">
+  <ConnectionProperties>
+    <Extension>SQL</Extension>
+    <ConnectString>Data Source=owner-PC;Initial Catalog=FPA</ConnectString>
+    <IntegratedSecurity>true</IntegratedSecurity>
+    <Prompt>Specify a user name and password for data source DataSourceFPA</Prompt>
+  </ConnectionProperties>
+  <DataSourceID>43b2c28c-497d-469e-9abe-74a3e8c4ff8a</DataSourceID>
+</RptDataSource>
