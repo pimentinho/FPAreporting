@@ -13,6 +13,20 @@
     <DataSet Name="DataSet1">
       <Query>
         <DataSourceName>DataSourceFPA</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@orgID">
+            <Value>=Parameters!orgID.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@pantryID">
+            <Value>=Parameters!pantryID.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@startDate">
+            <Value>=Parameters!startDate.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@endDate">
+            <Value>=Parameters!endDate.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
         <CommandText>SELECT DISTINCT tblTransactions.transactionID
 	,tblTransactions.STATUS
 	,tblTransactions.pantryID
@@ -50,6 +64,92 @@ ORDER BY tblTransactions.serviceDate DESC</CommandText>
         <Timeout>5</Timeout>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
+      <Fields>
+        <Field Name="transactionID">
+          <DataField>transactionID</DataField>
+          <rd:TypeName>System.Int64</rd:TypeName>
+        </Field>
+        <Field Name="STATUS">
+          <DataField>STATUS</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="pantryID">
+          <DataField>pantryID</DataField>
+          <rd:TypeName>System.Int64</rd:TypeName>
+        </Field>
+        <Field Name="householdName">
+          <DataField>householdName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="zipcode">
+          <DataField>zipcode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="totalFM">
+          <DataField>totalFM</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="serviceDate">
+          <DataField>serviceDate</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="qtyProvided">
+          <DataField>qtyProvided</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="numServed">
+          <DataField>numServed</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="whotocount">
+          <DataField>whotocount</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="barcode">
+          <DataField>barcode</DataField>
+          <rd:TypeName>System.Int64</rd:TypeName>
+        </Field>
+        <Field Name="orgID">
+          <DataField>orgID</DataField>
+          <rd:TypeName>System.Int64</rd:TypeName>
+        </Field>
+        <Field Name="servicesID">
+          <DataField>servicesID</DataField>
+          <rd:TypeName>System.Int64</rd:TypeName>
+        </Field>
+        <Field Name="servicesTitle">
+          <DataField>servicesTitle</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="PantryName">
+          <DataField>PantryName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="HomePantry">
+          <DataField>HomePantry</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="day">
+          <DataField>day</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="TIME">
+          <DataField>TIME</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="servicesTypeID">
+          <DataField>servicesTypeID</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ServiceType">
+          <DataField>ServiceType</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="numHouseholds">
+          <DataField>numHouseholds</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+      </Fields>
     </DataSet>
   </DataSets>
   <ReportSections>
@@ -2379,7 +2479,7 @@ ORDER BY tblTransactions.serviceDate DESC</CommandText>
                       <Direction>Descending</Direction>
                     </SortExpression>
                     <SortExpression>
-                      <Value>=Fields!time.Value</Value>
+                      <Value>=Fields!transactionID.Value</Value>
                       <Direction>Descending</Direction>
                     </SortExpression>
                   </SortExpressions>
@@ -2401,7 +2501,7 @@ ORDER BY tblTransactions.serviceDate DESC</CommandText>
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>2.32in</Height>
+        <Height>2.33042in</Height>
         <Style />
       </Body>
       <Width>17.15625in</Width>

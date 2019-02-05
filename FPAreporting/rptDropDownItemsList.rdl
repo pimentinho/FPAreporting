@@ -24,6 +24,7 @@ FROM            tblddltypes LEFT OUTER JOIN
                          tblddlitems ON tblddltypes.alphaTypeID = tblddlitems.alphaTypeID
 WHERE        (tblddlitems.orgID = @orgID)
 ORDER BY tblddltypes.description, itemSortOrder</CommandText>
+        <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>
         <Field Name="alphaTypeID">
@@ -65,29 +66,6 @@ ORDER BY tblddltypes.description, itemSortOrder</CommandText>
         <Field Name="itemSortOrder">
           <DataField>itemSortOrder</DataField>
           <rd:TypeName>System.Single</rd:TypeName>
-        </Field>
-      </Fields>
-    </DataSet>
-    <DataSet Name="dsOrgid">
-      <Query>
-        <DataSourceName>DataSourceFPA</DataSourceName>
-        <CommandText>SELECT        orgID, orgName, statusID
-FROM            tblOrg
-WHERE        (statusID = 'A') AND (orgID &gt; 1)
-ORDER BY orgName</CommandText>
-      </Query>
-      <Fields>
-        <Field Name="orgID">
-          <DataField>orgID</DataField>
-          <rd:TypeName>System.Int64</rd:TypeName>
-        </Field>
-        <Field Name="orgName">
-          <DataField>orgName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="statusID">
-          <DataField>statusID</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
     </DataSet>
@@ -526,13 +504,6 @@ ORDER BY orgName</CommandText>
       <DataType>Integer</DataType>
       <Prompt>orgID</Prompt>
       <Hidden>true</Hidden>
-      <ValidValues>
-        <DataSetReference>
-          <DataSetName>dsOrgid</DataSetName>
-          <ValueField>orgID</ValueField>
-          <LabelField>orgName</LabelField>
-        </DataSetReference>
-      </ValidValues>
     </ReportParameter>
   </ReportParameters>
   <ReportParametersLayout>

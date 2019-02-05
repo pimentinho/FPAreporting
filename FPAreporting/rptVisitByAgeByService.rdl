@@ -27,7 +27,7 @@
             <Value>=Parameters!servicesID.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT tblTransactions.pantryID, tblTransactions.whotocountID,
+        <CommandText>SELECT tblTransactions.pantryID, tblTransactions.whotocount,
 	tblddlitems_2.description AS ServiceType,
 	tblServices.servicesTitle,
 	tblPantries_1.pantryName AS PantryName,
@@ -54,7 +54,7 @@ LEFT OUTER JOIN tblddlitems AS tblddlitems_2 ON tblTransactions.servicesTypeID =
 LEFT OUTER JOIN tblServices WITH (NOLOCK) ON tblTransactions.servicesID = tblServices.servicesID
 LEFT OUTER JOIN tblPantries AS tblPantries_1 WITH (NOLOCK) ON tblTransactions.pantryID = tblPantries_1.pantryID
 WHERE (tblMembers.relationshipID &lt;&gt; 31)
-	AND tblTransactions.whotocountID = 'H'
+	AND tblTransactions.whotocount = 'H'
 	AND (tblMembers.STATUS = 'A')
 	AND (tblTransactions.STATUS = 'A')
 	AND (tblTransactions.orgID = @orgID)
@@ -63,7 +63,7 @@ WHERE (tblMembers.relationshipID &lt;&gt; 31)
 
 UNION
 
-SELECT tblTransactions.pantryID, tblTransactions.whotocountID,
+SELECT tblTransactions.pantryID, tblTransactions.whotocount,
 	tblddlitems_2.description AS ServiceType,
 	tblServices.servicesTitle,
 	tblPantries_1.pantryName AS PantryName,
@@ -90,7 +90,7 @@ LEFT OUTER JOIN tblddlitems AS tblddlitems_2 ON tblTransactions.servicesTypeID =
 LEFT OUTER JOIN tblServices WITH (NOLOCK) ON tblTransactions.servicesID = tblServices.servicesID
 LEFT OUTER JOIN tblPantries AS tblPantries_1 WITH (NOLOCK) ON tblTransactions.pantryID = tblPantries_1.pantryID
 WHERE (tblMembers.relationshipID &lt;&gt; 31)
-	AND (tblTransactions.whotocountID = 'I')
+	AND (tblTransactions.whotocount = 'I')
 	AND (tblMembers.STATUS = 'A')
 	AND (tblTransactions.STATUS = 'A')
 	AND (tblTransactions.orgID = @orgID)
@@ -104,6 +104,26 @@ AND (tblTransactions.servicesID IN (@servicesID))</CommandText>
           <DataField>pantryID</DataField>
           <rd:TypeName>System.Int64</rd:TypeName>
         </Field>
+        <Field Name="whotocount">
+          <DataField>whotocount</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ServiceType">
+          <DataField>ServiceType</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="servicesTitle">
+          <DataField>servicesTitle</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="PantryName">
+          <DataField>PantryName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="day">
+          <DataField>day</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="age17">
           <DataField>age17</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
@@ -115,26 +135,6 @@ AND (tblTransactions.servicesID IN (@servicesID))</CommandText>
         <Field Name="age65">
           <DataField>age65</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="whotocountID">
-          <DataField>whotocountID</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="PantryName">
-          <DataField>PantryName</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="servicesTitle">
-          <DataField>servicesTitle</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="day">
-          <DataField>day</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="ServiceType">
-          <DataField>ServiceType</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
     </DataSet>
@@ -195,7 +195,7 @@ WHERE        (orgID = @orgID) AND (servicesTypeID IN (@servicesTypeID))</Command
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Client Visits </Value>
+                    <Value>Household Visits </Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <FontSize>24pt</FontSize>
@@ -217,7 +217,7 @@ WHERE        (orgID = @orgID) AND (servicesTypeID IN (@servicesTypeID))</Command
             <rd:DefaultName>textbox1</rd:DefaultName>
             <Left>0.12375in</Left>
             <Height>0.43in</Height>
-            <Width>4.19792in</Width>
+            <Width>5.33334in</Width>
             <Style>
               <PaddingLeft>2pt</PaddingLeft>
               <PaddingRight>2pt</PaddingRight>
@@ -1782,8 +1782,8 @@ WHERE        (orgID = @orgID) AND (servicesTypeID IN (@servicesTypeID))</Command
                 </Action>
               </Actions>
             </ActionInfo>
-            <Top>0.18in</Top>
-            <Left>4.66667in</Left>
+            <Top>0.16611in</Top>
+            <Left>5.77084in</Left>
             <Height>0.25in</Height>
             <Width>1in</Width>
             <ZIndex>2</ZIndex>
@@ -1831,8 +1831,8 @@ WHERE        (orgID = @orgID) AND (servicesTypeID IN (@servicesTypeID))</Command
                 </Action>
               </Actions>
             </ActionInfo>
-            <Top>0.18in</Top>
-            <Left>5.90153in</Left>
+            <Top>0.16611in</Top>
+            <Left>6.95361in</Left>
             <Height>0.25in</Height>
             <Width>1in</Width>
             <ZIndex>3</ZIndex>
@@ -1868,7 +1868,7 @@ WHERE        (orgID = @orgID) AND (servicesTypeID IN (@servicesTypeID))</Command
             </Paragraphs>
             <rd:DefaultName>Textbox105</rd:DefaultName>
             <Top>0.16611in</Top>
-            <Left>11.11333in</Left>
+            <Left>12.23833in</Left>
             <Height>0.25in</Height>
             <Width>2.13542in</Width>
             <ZIndex>4</ZIndex>
@@ -1900,7 +1900,7 @@ WHERE        (orgID = @orgID) AND (servicesTypeID IN (@servicesTypeID))</Command
             </Paragraphs>
             <rd:DefaultName>Textbox107</rd:DefaultName>
             <Top>0.16611in</Top>
-            <Left>10.37375in</Left>
+            <Left>11.49875in</Left>
             <Height>0.25in</Height>
             <Width>0.69792in</Width>
             <ZIndex>5</ZIndex>
@@ -1935,7 +1935,7 @@ WHERE        (orgID = @orgID) AND (servicesTypeID IN (@servicesTypeID))</Command
             </Paragraphs>
             <rd:DefaultName>Textbox105</rd:DefaultName>
             <Top>0.16611in</Top>
-            <Left>7.99528in</Left>
+            <Left>9.12028in</Left>
             <Height>0.25in</Height>
             <Width>2.13542in</Width>
             <ZIndex>6</ZIndex>
@@ -1967,7 +1967,7 @@ WHERE        (orgID = @orgID) AND (servicesTypeID IN (@servicesTypeID))</Command
             </Paragraphs>
             <rd:DefaultName>Textbox108</rd:DefaultName>
             <Top>0.16611in</Top>
-            <Left>7.06125in</Left>
+            <Left>8.18625in</Left>
             <Height>0.25in</Height>
             <Width>0.89236in</Width>
             <ZIndex>7</ZIndex>

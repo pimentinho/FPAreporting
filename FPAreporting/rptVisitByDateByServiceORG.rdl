@@ -30,20 +30,40 @@
             <Value>=Parameters!servicesID.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT DISTINCT 
-                         tblTransactions.transactionID, tblTransactions.status, tblTransactions.pantryID, tblHouseholds.householdName, tblHouseholds.zip AS zipcode, tblHouseholds.totalFM, tblddlitems_1.description AS QtyType, 
-                         tblTransactions.serviceDate, tblTransactions.qtyProvided, tblTransactions.numServed, tblTransactions.whotocountID, tblHouseholds.barcode, tblTransactions.orgID, tblTransactions.servicesID, tblServices.servicesTitle, 
-                         tblPantries_1.pantryName AS PantryName, tblPantries_2.pantryName AS HomePantry, tblTransactions.servicesQtyTypeID, CONVERT(CHAR(10), tblTransactions.serviceDate, 101) AS day, CONVERT(VARCHAR(8), 
-                         tblTransactions.serviceDate, 108) AS TIME, tblTransactions.servicesTypeID, tblddlitems.description AS ServiceType, 1 AS numHouseholds, tblOrg.orgName
-FROM            tblTransactions WITH (NOLOCK) LEFT OUTER JOIN
-                         tblOrg ON tblTransactions.orgID = tblOrg.orgID LEFT OUTER JOIN
-                         tblddlitems ON tblTransactions.servicesTypeID = tblddlitems.alphaID LEFT OUTER JOIN
-                         tblPantries AS tblPantries_2 WITH (NOLOCK) ON tblTransactions.homePantryID = tblPantries_2.pantryID LEFT OUTER JOIN
-                         tblPantries AS tblPantries_1 WITH (NOLOCK) ON tblTransactions.pantryID = tblPantries_1.pantryID LEFT OUTER JOIN
-                         tblddlitems AS tblddlitems_1 WITH (NOLOCK) ON tblTransactions.servicesQtyTypeID = tblddlitems_1.alphaID LEFT OUTER JOIN
-                         tblHouseholds WITH (NOLOCK) ON tblTransactions.householdID = tblHouseholds.householdID LEFT OUTER JOIN
-                         tblServices WITH (NOLOCK) ON tblTransactions.servicesID = tblServices.servicesID
-WHERE        (tblTransactions.orgID = @orgID) AND (tblTransactions.serviceDate &gt;= @startDate) AND (tblTransactions.serviceDate &lt;= @endDate) AND (tblTransactions.status = 'A') AND (tblTransactions.servicesTypeID IN (@servicesTypeID))
+        <CommandText>SELECT DISTINCT tblTransactions.transactionID
+	,tblTransactions.STATUS
+	,tblTransactions.pantryID
+	,tblHouseholds.householdName
+	,tblHouseholds.zip AS zipcode
+	,tblHouseholds.totalFM
+	,tblTransactions.serviceDate
+	,tblTransactions.qtyProvided
+	,tblTransactions.numServed
+	,tblTransactions.whotocount as whotocountID
+	,tblHouseholds.barcode
+	,tblTransactions.orgID
+	,tblTransactions.servicesID
+	,tblServices.servicesTitle
+	,tblPantries_1.pantryName AS PantryName
+	,tblPantries_2.pantryName AS HomePantry
+	,CONVERT(CHAR(10), tblTransactions.serviceDate, 101) AS day
+	,CONVERT(VARCHAR(8), tblTransactions.serviceDate, 108) AS TIME
+	,tblTransactions.servicesTypeID
+	,tblddlitems.description AS ServiceType
+	,1 AS numHouseholds
+	,tblOrg.orgName
+FROM tblTransactions WITH (NOLOCK)
+LEFT OUTER JOIN tblOrg ON tblTransactions.orgID = tblOrg.orgID
+LEFT OUTER JOIN tblddlitems ON tblTransactions.servicesTypeID = tblddlitems.alphaID
+LEFT OUTER JOIN tblPantries AS tblPantries_2 WITH (NOLOCK) ON tblTransactions.homePantryID = tblPantries_2.pantryID
+LEFT OUTER JOIN tblPantries AS tblPantries_1 WITH (NOLOCK) ON tblTransactions.pantryID = tblPantries_1.pantryID
+LEFT OUTER JOIN tblHouseholds WITH (NOLOCK) ON tblTransactions.householdID = tblHouseholds.householdID
+LEFT OUTER JOIN tblServices WITH (NOLOCK) ON tblTransactions.servicesID = tblServices.servicesID
+WHERE (tblTransactions.orgID = @orgID)
+	AND (tblTransactions.serviceDate &gt;= @startDate)
+	AND (tblTransactions.serviceDate &lt;= @endDate)
+	AND (tblTransactions.STATUS = 'A')
+	AND (tblTransactions.servicesTypeID IN (@servicesTypeID))
 	AND (tblTransactions.servicesID IN (@servicesID))
 ORDER BY tblTransactions.serviceDate DESC</CommandText>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
@@ -54,7 +74,7 @@ ORDER BY tblTransactions.serviceDate DESC</CommandText>
           <rd:TypeName>System.Int64</rd:TypeName>
         </Field>
         <Field Name="status">
-          <DataField>status</DataField>
+          <DataField>STATUS</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="pantryID">
@@ -72,10 +92,6 @@ ORDER BY tblTransactions.serviceDate DESC</CommandText>
         <Field Name="totalFM">
           <DataField>totalFM</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="QtyType">
-          <DataField>QtyType</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="serviceDate">
           <DataField>serviceDate</DataField>
@@ -115,10 +131,6 @@ ORDER BY tblTransactions.serviceDate DESC</CommandText>
         </Field>
         <Field Name="HomePantry">
           <DataField>HomePantry</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="servicesQtyTypeID">
-          <DataField>servicesQtyTypeID</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="day">
@@ -204,7 +216,7 @@ WHERE        (orgID = @orgID) AND (servicesTypeID IN (@servicesTypeID))</Command
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Client Visits </Value>
+                    <Value>Household Visits </Value>
                     <Style>
                       <FontFamily>Segoe UI Light</FontFamily>
                       <FontSize>24pt</FontSize>
@@ -226,7 +238,7 @@ WHERE        (orgID = @orgID) AND (servicesTypeID IN (@servicesTypeID))</Command
             <rd:DefaultName>textbox1</rd:DefaultName>
             <Left>0.12375in</Left>
             <Height>0.43in</Height>
-            <Width>2.88542in</Width>
+            <Width>3.89584in</Width>
             <Style>
               <PaddingLeft>2pt</PaddingLeft>
               <PaddingRight>2pt</PaddingRight>
@@ -328,7 +340,7 @@ WHERE        (orgID = @orgID) AND (servicesTypeID IN (@servicesTypeID))</Command
               </Actions>
             </ActionInfo>
             <Top>0.16611in</Top>
-            <Left>3.155in</Left>
+            <Left>4.28in</Left>
             <Height>0.25in</Height>
             <Width>1in</Width>
             <ZIndex>2</ZIndex>
@@ -377,7 +389,7 @@ WHERE        (orgID = @orgID) AND (servicesTypeID IN (@servicesTypeID))</Command
               </Actions>
             </ActionInfo>
             <Top>0.16611in</Top>
-            <Left>4.38986in</Left>
+            <Left>5.51486in</Left>
             <Height>0.25in</Height>
             <Width>1in</Width>
             <ZIndex>3</ZIndex>
@@ -410,7 +422,7 @@ WHERE        (orgID = @orgID) AND (servicesTypeID IN (@servicesTypeID))</Command
             </Paragraphs>
             <rd:DefaultName>Textbox108</rd:DefaultName>
             <Top>0.15223in</Top>
-            <Left>5.77653in</Left>
+            <Left>6.90153in</Left>
             <Height>0.25in</Height>
             <Width>0.89236in</Width>
             <ZIndex>4</ZIndex>
@@ -445,7 +457,7 @@ WHERE        (orgID = @orgID) AND (servicesTypeID IN (@servicesTypeID))</Command
             </Paragraphs>
             <rd:DefaultName>Textbox105</rd:DefaultName>
             <Top>0.15223in</Top>
-            <Left>6.71056in</Left>
+            <Left>7.83556in</Left>
             <Height>0.25in</Height>
             <Width>2.13542in</Width>
             <ZIndex>5</ZIndex>
@@ -477,7 +489,7 @@ WHERE        (orgID = @orgID) AND (servicesTypeID IN (@servicesTypeID))</Command
             </Paragraphs>
             <rd:DefaultName>Textbox107</rd:DefaultName>
             <Top>0.15223in</Top>
-            <Left>9.08903in</Left>
+            <Left>10.21403in</Left>
             <Height>0.25in</Height>
             <Width>0.69792in</Width>
             <ZIndex>6</ZIndex>
@@ -512,7 +524,7 @@ WHERE        (orgID = @orgID) AND (servicesTypeID IN (@servicesTypeID))</Command
             </Paragraphs>
             <rd:DefaultName>Textbox105</rd:DefaultName>
             <Top>0.15223in</Top>
-            <Left>9.82861in</Left>
+            <Left>10.95361in</Left>
             <Height>0.25in</Height>
             <Width>2.13542in</Width>
             <ZIndex>7</ZIndex>
@@ -531,9 +543,6 @@ WHERE        (orgID = @orgID) AND (servicesTypeID IN (@servicesTypeID))</Command
               <TablixColumns>
                 <TablixColumn>
                   <Width>0.91667in</Width>
-                </TablixColumn>
-                <TablixColumn>
-                  <Width>1in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>1in</Width>
@@ -586,48 +595,6 @@ WHERE        (orgID = @orgID) AND (servicesTypeID IN (@servicesTypeID))</Command
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>textbox9</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                            </Border>
-                            <BottomBorder>
-                              <Style>Solid</Style>
-                            </BottomBorder>
-                            <BackgroundColor>PaleTurquoise</BackgroundColor>
-                            <FontFamily />
-                            <VerticalAlign>Bottom</VerticalAlign>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="textbox10">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Qty Type</Value>
-                                  <Style>
-                                    <FontFamily />
-                                    <FontSize>11pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>#666666</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>textbox10</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -969,54 +936,6 @@ WHERE        (orgID = @orgID) AND (servicesTypeID IN (@servicesTypeID))</Command
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox136</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>None</Style>
-                            </Border>
-                            <TopBorder>
-                              <Color>LightGrey</Color>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Color>LightGrey</Color>
-                              <Style>Solid</Style>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Color>LightGrey</Color>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Color>LightGrey</Color>
-                            </RightBorder>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox137">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value />
-                                  <Style>
-                                    <FontFamily />
-                                    <Color>#333333</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox137</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -1406,55 +1325,6 @@ WHERE        (orgID = @orgID) AND (servicesTypeID IN (@servicesTypeID))</Command
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox73</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>None</Style>
-                            </Border>
-                            <TopBorder>
-                              <Color>LightGrey</Color>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Color>LightGrey</Color>
-                              <Style>Solid</Style>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Color>LightGrey</Color>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Color>LightGrey</Color>
-                            </RightBorder>
-                            <BackgroundColor>WhiteSmoke</BackgroundColor>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox74">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value />
-                                  <Style>
-                                    <FontFamily />
-                                    <Color>#333333</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox74</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -1881,55 +1751,6 @@ WHERE        (orgID = @orgID) AND (servicesTypeID IN (@servicesTypeID))</Command
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox128">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value />
-                                  <Style>
-                                    <FontFamily />
-                                    <Color>#333333</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox128</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>None</Style>
-                            </Border>
-                            <TopBorder>
-                              <Color>LightGrey</Color>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Color>LightGrey</Color>
-                              <Style>Solid</Style>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Color>LightGrey</Color>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Color>LightGrey</Color>
-                            </RightBorder>
-                            <BackgroundColor>Yellow</BackgroundColor>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
                         <Textbox Name="numHouseholds3">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -2311,44 +2132,6 @@ WHERE        (orgID = @orgID) AND (servicesTypeID IN (@servicesTypeID))</Command
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox110">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value />
-                                  <Style>
-                                    <FontFamily />
-                                    <Color>#333333</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox110</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                            </Border>
-                            <BottomBorder>
-                              <Style>Solid</Style>
-                            </BottomBorder>
-                            <BackgroundColor>LightBlue</BackgroundColor>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
                         <Textbox Name="numHouseholds2">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -2634,44 +2417,6 @@ WHERE        (orgID = @orgID) AND (servicesTypeID IN (@servicesTypeID))</Command
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox93</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                            </Border>
-                            <BottomBorder>
-                              <Style>Solid</Style>
-                            </BottomBorder>
-                            <BackgroundColor>LightYellow</BackgroundColor>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox94">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!QtyType.Value</Value>
-                                  <Style>
-                                    <FontFamily />
-                                    <Color>#333333</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox94</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -2990,44 +2735,6 @@ WHERE        (orgID = @orgID) AND (servicesTypeID IN (@servicesTypeID))</Command
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="QtyType">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!QtyType.Value</Value>
-                                  <Style>
-                                    <FontFamily />
-                                    <Color>#333333</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>QtyType</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                            </Border>
-                            <BottomBorder>
-                              <Style>Solid</Style>
-                            </BottomBorder>
-                            <FontFamily />
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
                         <Textbox Name="numHouseholds">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -3293,11 +3000,6 @@ WHERE        (orgID = @orgID) AND (servicesTypeID IN (@servicesTypeID))</Command
             </TablixBody>
             <TablixColumnHierarchy>
               <TablixMembers>
-                <TablixMember>
-                  <Visibility>
-                    <Hidden>=iif(Parameters!ExpandCollapse.Value = "Collapse", True, False)</Hidden>
-                  </Visibility>
-                </TablixMember>
                 <TablixMember>
                   <Visibility>
                     <Hidden>=iif(Parameters!ExpandCollapse.Value = "Collapse", True, False)</Hidden>
@@ -4134,7 +3836,7 @@ WHERE        (orgID = @orgID) AND (servicesTypeID IN (@servicesTypeID))</Command
             <Top>0.51333in</Top>
             <Left>0.13417in</Left>
             <Height>1.75292in</Height>
-            <Width>20.11459in</Width>
+            <Width>19.11459in</Width>
             <ZIndex>8</ZIndex>
             <Style>
               <FontFamily />
