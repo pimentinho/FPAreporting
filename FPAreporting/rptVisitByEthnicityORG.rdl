@@ -33,24 +33,24 @@
             <Value>=Parameters!Ethnicity.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT DISTINCT tblTransactions.transactionID
-	,tblTransactions.STATUS
-	,tblTransactions.pantryID
+        <CommandText>SELECT DISTINCT tblTrans.transID
+	,tblTrans.STATUS
+	,tblTrans.pantryID
 	,tblHouseholds.householdName
 	,tblHouseholds.totalFM
-	,tblTransactions.serviceDate
-	,tblTransactions.qtyProvided
-	,tblTransactions.numServed
-	,tblTransactions.whotocount AS whotocountID
+	,tblTrans.serviceDate
+	,tblTrans.qtyOUT
+	,tblTrans.numServed
+	,tblTrans.whotocount AS whotocountID
 	,tblHouseholds.barcode
-	,tblTransactions.orgID
-	,tblTransactions.servicesID
+	,tblTrans.orgID
+	,tblTrans.servicesID
 	,tblServices.servicesTitle
 	,tblPantries_1.PantryName
 	,tblPantries_2.PantryName AS HomePantry
-	,CONVERT(CHAR(10), tblTransactions.serviceDate, 121) AS day
-	,CONVERT(VARCHAR(8), tblTransactions.serviceDate, 108) AS TIME
-	,tblTransactions.servicesTypeID
+	,CONVERT(CHAR(10), tblTrans.serviceDate, 121) AS day
+	,CONVERT(VARCHAR(8), tblTrans.serviceDate, 108) AS TIME
+	,tblTrans.servicesTypeID
 	,tblddlitems_2.description AS ServiceType
 	,1 AS numHouseholds
 	,tblOrg.orgName
@@ -58,25 +58,24 @@
 	,tblddlitems.description AS Ethnicity
 FROM tblddlitems
 RIGHT OUTER JOIN tblHouseholds WITH (NOLOCK) ON tblddlitems.ddlitemid = tblHouseholds.ethnicityID
-RIGHT OUTER JOIN tblTransactions WITH (NOLOCK)
-LEFT OUTER JOIN tblOrg ON tblTransactions.orgID = tblOrg.orgID
-LEFT OUTER JOIN tblddlitems AS tblddlitems_2 ON tblTransactions.servicesTypeID = tblddlitems_2.alphaID
-LEFT OUTER JOIN tblPantries AS tblPantries_2 WITH (NOLOCK) ON tblTransactions.homePantryID = tblPantries_2.pantryID
-LEFT OUTER JOIN tblPantries AS tblPantries_1 WITH (NOLOCK) ON tblTransactions.pantryID = tblPantries_1.pantryID ON tblHouseholds.householdID = tblTransactions.householdID LEFT OUTER JOIN tblServices WITH (NOLOCK) ON tblTransactions.servicesID = tblServices.servicesID
- WHERE (tblTransactions.orgID = @orgID)
-	AND (tblTransactions.serviceDate &gt;= @startDate)
-	AND (tblTransactions.serviceDate &lt;= @endDate)
-	AND (tblTransactions.STATUS = 'A')
-	AND (tblTransactions.servicesTypeID IN (@servicesTypeID))
-	AND (tblTransactions.servicesID IN (@servicesID))
+RIGHT OUTER JOIN tblTrans WITH (NOLOCK)
+LEFT OUTER JOIN tblOrg ON tblTrans.orgID = tblOrg.orgID
+LEFT OUTER JOIN tblddlitems AS tblddlitems_2 ON tblTrans.servicesTypeID = tblddlitems_2.alphaID
+LEFT OUTER JOIN tblPantries AS tblPantries_2 WITH (NOLOCK) ON tblTrans.homePantryID = tblPantries_2.pantryID
+LEFT OUTER JOIN tblPantries AS tblPantries_1 WITH (NOLOCK) ON tblTrans.pantryID = tblPantries_1.pantryID ON tblHouseholds.householdID = tblTrans.recordID LEFT OUTER JOIN tblServices WITH (NOLOCK) ON tblTrans.servicesID = tblServices.servicesID
+ WHERE (tblTrans.orgID = @orgID)
+	AND (tblTrans.serviceDate &gt;= @startDate)
+	AND (tblTrans.serviceDate &lt;= @endDate)
+	AND (tblTrans.STATUS = 'A')
+	AND (tblTrans.servicesTypeID IN (@servicesTypeID))
+	AND (tblTrans.servicesID IN (@servicesID))
 	AND (tblHouseholds.ethnicityID IN (@Ethnicity))
-ORDER BY tblTransactions.serviceDate DESC
-</CommandText>
+ORDER BY tblTrans.serviceDate DESC</CommandText>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>
-        <Field Name="transactionID">
-          <DataField>transactionID</DataField>
+        <Field Name="transID">
+          <DataField>transID</DataField>
           <rd:TypeName>System.Int64</rd:TypeName>
         </Field>
         <Field Name="STATUS">
@@ -99,9 +98,9 @@ ORDER BY tblTransactions.serviceDate DESC
           <DataField>serviceDate</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>
         </Field>
-        <Field Name="qtyProvided">
-          <DataField>qtyProvided</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
+        <Field Name="qtyOUT">
+          <DataField>qtyOUT</DataField>
+          <rd:TypeName>System.Single</rd:TypeName>
         </Field>
         <Field Name="numServed">
           <DataField>numServed</DataField>
@@ -2201,14 +2200,14 @@ WHERE        (alphaTypeID = 'E') AND (orgID = @orgID)</CommandText>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox93">
+                        <Textbox Name="qtyOUT">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Sum(Fields!qtyProvided.Value)</Value>
+                                  <Value>=Sum(Fields!qtyOUT.Value)</Value>
                                   <Style>
                                     <FontFamily />
                                     <FontWeight>Bold</FontWeight>
@@ -2221,7 +2220,7 @@ WHERE        (alphaTypeID = 'E') AND (orgID = @orgID)</CommandText>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox93</rd:DefaultName>
+                          <rd:DefaultName>qtyOUT</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -2465,14 +2464,14 @@ WHERE        (alphaTypeID = 'E') AND (orgID = @orgID)</CommandText>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="qtyProvided">
+                        <Textbox Name="qtyOUT1">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!qtyProvided.Value</Value>
+                                  <Value>=Fields!qtyOUT.Value</Value>
                                   <Style>
                                     <FontFamily />
                                     <Color>#333333</Color>
@@ -2484,7 +2483,7 @@ WHERE        (alphaTypeID = 'E') AND (orgID = @orgID)</CommandText>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>qtyProvided</rd:DefaultName>
+                          <rd:DefaultName>qtyOUT1</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -2499,6 +2498,7 @@ WHERE        (alphaTypeID = 'E') AND (orgID = @orgID)</CommandText>
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>

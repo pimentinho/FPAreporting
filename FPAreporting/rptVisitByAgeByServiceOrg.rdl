@@ -21,31 +21,80 @@
             <Value>=Parameters!servicesTypeID.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT        tblTransactions.pantryID, tblTransactions.whotocount, tblddlitems_2.description AS ServiceType, tblServices.servicesTitle, tblPantries_1.pantryName AS PantryName, CONVERT(CHAR(10), tblTransactions.serviceDate, 101) 
-                         AS day, CASE WHEN (CONVERT(INT, CONVERT(CHAR(8), getdate(), 112)) - CONVERT(CHAR(8), tblMembers.Birthdate, 112)) / 10000 &lt; 18 THEN 1 ELSE 0 END AS age17, CASE WHEN (CONVERT(INT, CONVERT(CHAR(8), getdate(), 
-                         112)) - CONVERT(CHAR(8), tblMembers.Birthdate, 112)) / 10000 &gt; 17 AND (CONVERT(INT, CONVERT(CHAR(8), getdate(), 112)) - CONVERT(CHAR(8), tblMembers.Birthdate, 112)) / 10000 &lt; 65 THEN 1 ELSE 0 END AS age64, 
-                         CASE WHEN (CONVERT(INT, CONVERT(CHAR(8), getdate(), 112)) - CONVERT(CHAR(8), tblMembers.Birthdate, 112)) / 10000 &gt; 64 THEN 1 ELSE 0 END AS age65, tblOrg.orgName
-FROM            tblTransactions LEFT OUTER JOIN
-                         tblOrg ON tblTransactions.orgID = tblOrg.orgID LEFT OUTER JOIN
-                         tblMembers ON tblTransactions.householdID = tblMembers.householdID LEFT OUTER JOIN
-                         tblddlitems AS tblddlitems_2 ON tblTransactions.servicesTypeID = tblddlitems_2.alphaID LEFT OUTER JOIN
-                         tblServices WITH (NOLOCK) ON tblTransactions.servicesID = tblServices.servicesID LEFT OUTER JOIN
-                         tblPantries AS tblPantries_1 WITH (NOLOCK) ON tblTransactions.pantryID = tblPantries_1.pantryID
-WHERE        (tblMembers.relationshipID &lt;&gt; 31) AND (tblTransactions.whotocount = 'H') AND (tblMembers.status = 'A') AND (tblTransactions.status = 'A') AND (tblTransactions.orgID = @orgID)   AND (tblTransactions.servicesTypeID  IN (@servicesTypeID))
+        <CommandText>SELECT tblTrans.pantryID
+	,tblTrans.whotocount
+	,tblddlitems_2.description AS ServiceType
+	,tblServices.servicesTitle
+	,tblPantries_1.pantryName AS PantryName
+	,CONVERT(CHAR(10), tblTrans.serviceDate, 101) AS day
+	,CASE 
+		WHEN (CONVERT(INT, CONVERT(CHAR(8), getdate(), 112)) - CONVERT(CHAR(8), tblMembers.Birthdate, 112)) / 10000 &lt; 18
+			THEN 1
+		ELSE 0
+		END AS age17
+	,CASE 
+		WHEN (CONVERT(INT, CONVERT(CHAR(8), getdate(), 112)) - CONVERT(CHAR(8), tblMembers.Birthdate, 112)) / 10000 &gt; 17
+			AND (CONVERT(INT, CONVERT(CHAR(8), getdate(), 112)) - CONVERT(CHAR(8), tblMembers.Birthdate, 112)) / 10000 &lt; 65
+			THEN 1
+		ELSE 0
+		END AS age64
+	,CASE 
+		WHEN (CONVERT(INT, CONVERT(CHAR(8), getdate(), 112)) - CONVERT(CHAR(8), tblMembers.Birthdate, 112)) / 10000 &gt; 64
+			THEN 1
+		ELSE 0
+		END AS age65
+	,tblOrg.orgName
+FROM tblTrans
+LEFT OUTER JOIN tblOrg ON tblTrans.orgID = tblOrg.orgID
+LEFT OUTER JOIN tblMembers ON tblTrans.recordID = tblMembers.householdID
+LEFT OUTER JOIN tblddlitems AS tblddlitems_2 ON tblTrans.servicesTypeID = tblddlitems_2.alphaID
+LEFT OUTER JOIN tblServices WITH (NOLOCK) ON tblTrans.servicesID = tblServices.servicesID
+LEFT OUTER JOIN tblPantries AS tblPantries_1 WITH (NOLOCK) ON tblTrans.pantryID = tblPantries_1.pantryID
+WHERE (tblMembers.relationshipID &lt;&gt; 31)
+	AND (tblTrans.whotocount = 'H')
+	AND (tblMembers.STATUS = 'A')
+	AND (tblTrans.STATUS = 'A')
+	AND (tblTrans.orgID = @orgID)
+	AND (tblTrans.servicesTypeID IN (@servicesTypeID))
 
 UNION
 
-SELECT        tblTransactions.pantryID, tblTransactions.whotocount, tblddlitems_2.description AS ServiceType, tblServices.servicesTitle, tblPantries_1.pantryName AS PantryName, CONVERT(CHAR(10), tblTransactions.serviceDate, 101) 
-                         AS day, CASE WHEN (CONVERT(INT, CONVERT(CHAR(8), getdate(), 112)) - CONVERT(CHAR(8), tblMembers.Birthdate, 112)) / 10000 &lt; 18 THEN 1 ELSE 0 END AS age17, CASE WHEN (CONVERT(INT, CONVERT(CHAR(8), getdate(), 
-                         112)) - CONVERT(CHAR(8), tblMembers.Birthdate, 112)) / 10000 &gt; 17 AND (CONVERT(INT, CONVERT(CHAR(8), getdate(), 112)) - CONVERT(CHAR(8), tblMembers.Birthdate, 112)) / 10000 &lt; 65 THEN 1 ELSE 0 END AS age64, 
-                         CASE WHEN (CONVERT(INT, CONVERT(CHAR(8), getdate(), 112)) - CONVERT(CHAR(8), tblMembers.Birthdate, 112)) / 10000 &gt; 64 THEN 1 ELSE 0 END AS age65, tblOrg.orgName
-FROM            tblTransactions LEFT OUTER JOIN
-                         tblOrg ON tblTransactions.orgID = tblOrg.orgID LEFT OUTER JOIN
-                         tblMembers ON tblTransactions.whoservedID = tblMembers.MemberID LEFT OUTER JOIN
-                         tblddlitems AS tblddlitems_2 ON tblTransactions.servicesTypeID = tblddlitems_2.alphaID LEFT OUTER JOIN
-                         tblServices WITH (NOLOCK) ON tblTransactions.servicesID = tblServices.servicesID LEFT OUTER JOIN
-                         tblPantries AS tblPantries_1 WITH (NOLOCK) ON tblTransactions.pantryID = tblPantries_1.pantryID
-WHERE        (tblMembers.relationshipID &lt;&gt; 31) AND (tblTransactions.whotocount = 'I') AND (tblMembers.status = 'A') AND (tblTransactions.status = 'A') AND (tblTransactions.orgID = @orgID)  AND (tblTransactions.servicesTypeID  IN (@servicesTypeID))</CommandText>
+SELECT tblTrans.pantryID
+	,tblTrans.whotocount
+	,tblddlitems_2.description AS ServiceType
+	,tblServices.servicesTitle
+	,tblPantries_1.pantryName AS PantryName
+	,CONVERT(CHAR(10), tblTrans.serviceDate, 101) AS day
+	,CASE 
+		WHEN (CONVERT(INT, CONVERT(CHAR(8), getdate(), 112)) - CONVERT(CHAR(8), tblMembers.Birthdate, 112)) / 10000 &lt; 18
+			THEN 1
+		ELSE 0
+		END AS age17
+	,CASE 
+		WHEN (CONVERT(INT, CONVERT(CHAR(8), getdate(), 112)) - CONVERT(CHAR(8), tblMembers.Birthdate, 112)) / 10000 &gt; 17
+			AND (CONVERT(INT, CONVERT(CHAR(8), getdate(), 112)) - CONVERT(CHAR(8), tblMembers.Birthdate, 112)) / 10000 &lt; 65
+			THEN 1
+		ELSE 0
+		END AS age64
+	,CASE 
+		WHEN (CONVERT(INT, CONVERT(CHAR(8), getdate(), 112)) - CONVERT(CHAR(8), tblMembers.Birthdate, 112)) / 10000 &gt; 64
+			THEN 1
+		ELSE 0
+		END AS age65
+	,tblOrg.orgName
+FROM tblTrans
+LEFT OUTER JOIN tblOrg ON tblTrans.orgID = tblOrg.orgID
+LEFT OUTER JOIN tblMembers ON tblTrans.whoservedID = tblMembers.MemberID
+LEFT OUTER JOIN tblddlitems AS tblddlitems_2 ON tblTrans.servicesTypeID = tblddlitems_2.alphaID
+LEFT OUTER JOIN tblServices WITH (NOLOCK) ON tblTrans.servicesID = tblServices.servicesID
+LEFT OUTER JOIN tblPantries AS tblPantries_1 WITH (NOLOCK) ON tblTrans.pantryID = tblPantries_1.pantryID
+WHERE (tblMembers.relationshipID &lt;&gt; 31)
+	AND (tblTrans.whotocount = 'I')
+	AND (tblMembers.STATUS = 'A')
+	AND (tblTrans.STATUS = 'A')
+	AND (tblTrans.orgID = @orgID)
+	AND (tblTrans.servicesTypeID IN (@servicesTypeID))
+</CommandText>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>

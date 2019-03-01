@@ -24,26 +24,25 @@
             <Value>=Parameters!startDate.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>SELECT DISTINCT tblHouseholds.householdName,
-	tblTransactions.orgID,
-	tblTransactions.pantryID,
-	tblOrg.orgName,
-	tblPantries.pantryName,
-	1 AS [distinct],
-	tblHouseholds.totalFM as NumHousehold
+        <CommandText>SELECT DISTINCT tblHouseholds.householdName
+	,tblTrans.orgID
+	,tblTrans.pantryID
+	,tblOrg.orgName
+	,tblPantries.pantryName
+	,1 AS [distinct]
+	,tblHouseholds.totalFM AS NumHousehold
 FROM tblHouseholds
-RIGHT OUTER JOIN tblTransactions ON tblHouseholds.householdID = tblTransactions.householdID
+RIGHT OUTER JOIN tblTrans ON tblHouseholds.householdID = tblTrans.recordID
 LEFT OUTER JOIN tblOrg
-RIGHT OUTER JOIN tblPantries ON tblOrg.orgID = tblPantries.OrgID ON tblTransactions.pantryID = tblPantries.pantryID
- WHERE (tblTransactions.STATUS = 'A')
-	AND (tblTransactions.orgID = @orgID)
+RIGHT OUTER JOIN tblPantries ON tblOrg.orgID = tblPantries.OrgID ON tblTrans.pantryID = tblPantries.pantryID WHERE (tblTrans.STATUS = 'A')
+	AND (tblTrans.orgID = @orgID)
 	AND (
-		(tblTransactions.serviceDate &gt;= @startDate)
-		AND (tblTransactions.serviceDate &lt;= @endDate)
+		(tblTrans.serviceDate &gt;= @startDate)
+		AND (tblTrans.serviceDate &lt;= @endDate)
 		)
-ORDER BY tblOrg.orgName,
-	tblPantries.pantryName,
-	tblHouseholds.householdName</CommandText>
+ORDER BY tblOrg.orgName
+	,tblPantries.pantryName
+	,tblHouseholds.householdName</CommandText>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>
